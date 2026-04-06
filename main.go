@@ -97,7 +97,15 @@ func main() {
 	// ✅ Prefix
 	targetPrefix := "ABCD"
 	if len(os.Args) > 1 {
-		targetPrefix = strings.ToUpper(os.Args[1])
+		prefix := strings.ToUpper(os.Args[1])
+		// Validate base32 characters
+		for _, c := range prefix {
+			if _, ok := charMap[c]; !ok {
+				fmt.Fprintf(os.Stderr, "Error: Invalid character '%c' in prefix. Only A-Z and 2-7 are allowed.\n", c)
+				os.Exit(1)
+			}
+		}
+		targetPrefix = prefix
 	}
 
 	targetBits := prefixToBits(targetPrefix)
